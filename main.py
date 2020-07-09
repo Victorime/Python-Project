@@ -3,7 +3,7 @@ import os
 # Module for reading CSV files
 import csv
 from statistics import mean
-csvpath = os.path.join('.', 'Resources', 'election_data.csv')
+csvpath = os.path.join('.', 'PyPoll/Resources', 'election_data.csv')
 outputpath = os.path.join('.', 'Output', 'Election_Data_Analysis_Summary.txt')
 VoterList =[]
 CountryList =[]
@@ -21,3 +21,12 @@ with open(csvpath, newline='', encoding="utf-8") as csvfile:
 		VoterList.append(row[0])
 		CountryList.append(row[1])
 		CandidateList.append(row[2])
+
+def unique(CandidateList):
+	# For all elements
+	for x in CandidateList:
+		# check if exists in Candidates or not
+		if x not in Candidates:
+			Candidates.append(x)
+			CandidateVotes.append(0)
+			CandidateVotePercentage.append(0)
