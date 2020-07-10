@@ -3,8 +3,8 @@ import os
 # Module for reading CSV files
 import csv
 from statistics import mean
-csvpath = os.path.join(".", "PyBank/Resources", "budget_data.csv")
-outputpath = os.path.join('.', 'Output', 'Financial_Analysis_Summary.txt')
+csvpath = os.path.join("PyBank/Resources", "budget_data.csv")
+outputpath = os.path.join("PyBank/Output", "Financial_Analysis_Summary.txt")
 
 monthList = []
 profitList = []
@@ -19,7 +19,7 @@ with open(csvpath, newline='', encoding="utf-8") as csvfile:
         #monthcount = monthcount +1
         #total = total + int(row[1])
         monthList.append(row[0])
-        profitList.append(int(row[1]))
+        profitList.append(int(row[0]))
    
     for i in range(len(profitList)-1) :        
         profitChange.append(profitList[i+1]-profitList[i])
