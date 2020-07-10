@@ -11,7 +11,7 @@ total_month = 0
 month_of_change = []
 net_change_list = []
 greatest_increase = ["", 0]
-greatesr_decrease = ["", 999999999999999999]
+greatest_decrease = ["", 999999999999999999]
 total_net = 0
 
 # Read the csv and convert it into a list of dictionaries
@@ -41,7 +41,7 @@ with open(csvpath) as financial_data:
         month_of_change = month_of_change + [row[0]]
 
         #Calculate the greatest increasee
-        if net_change > greatest_increse[1]:
+        if net_change > greatest_increase[1]:
             greatest_increase[0] = row[0]
             greatest_decrease[1] = net_change
 
