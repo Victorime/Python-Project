@@ -6,52 +6,64 @@ from statistics import mean
 csvpath = os.path.join("PyBank/Resources", "budget_data.csv")
 outputpath = os.path.join("PyBank/Output", "Financial_Analysis_Summary.txt")
 
-monthList = []
-profitList = []
-profitChange = []
-with open(csvpath, newline='', encoding="utf-8") as csvfile:
+# Track some financial parameters
+total_month = 0
+month_of_change = []
+net_change_list = []
+greatest_increase = ["", 0]
+greatesr_decrease = ["", 999999999999999999]
+total_net = 0
 
-    # CSV reader specifies delimiter and variable that holds contents
-    csvreader = csv.reader(csvfile, delimiter=',')
-    csv_header = next(csvreader)
+# Read the csv and convert it into a list of dictionaries
+with open(csvpath) as financial_data:
+    reader = csv.reader(financial_data)
 
-    for row in csvreader:
-        #monthcount = monthcount +1
-        #total = total + int(row[1])
-        monthList.append(row[0])
-        profitList.append(int(row[0]))
-   
-    for i in range(len(profitList)-1) :        
-        profitChange.append(profitList[i+1]-profitList[i])
-                          
-maxvalueIncrease = max(profitChange)
-maxvalueDecrease = min(profitChange)
-maxvalueIncreaseMonth = monthList[profitChange.index(max(profitChange)) + 1]
-maxvalueDecreaseMonth = monthList[profitChange.index(min(profitChange)) + 1]
+    # Read the header row
+    header = next(reader)
 
-# Finding Average Change by Summing all the ProfitChange List and divided
-AverageChange =round(sum(profitChange)/len(profitChange),2)
+    # Extract from row to avoid appending to net_change_list
+    first_row = next(reader)
+    total_months = total_month + 1
+    total_net = total_months + 1
+    total_net = total_net + int(first_row[1])
+    prev_net = int(first_row[1])
 
-# Using Mean from Statistics Library
-ChangeAverage=mean(profitChange)
-#print(ChangeAverage)
+    for row in reader:
+        
+        #Track the net change
+        total_months = total_months + 1
+        total_net = total_net + int(row[1])
 
-# Print Statements
+        # Track the net change
+        net_change = int(row[1]) - prev_net
+        prev_net = int(row[1])
+        net_change_list = net_change_list + [net_change]
+        month_of_change = month_of_change + [row[0]]
 
-print("Python Challenge Financial Analysis")
-print("------------------------------------")
-print(f"Total No of Months: {len(monthList)}")
-print(f"Net Total of Profit/Loss: ${sum(profitList)}")
-print(f"Average Change: {AverageChange}")
-print(f"Greatest Increase (in Profits): {maxvalueIncreaseMonth} ${(str(maxvalueIncrease))}")
-print(f"Greatest Decrease (in Profits): {maxvalueDecreaseMonth} ${(str(maxvalueDecrease))}")
-          
-with open(outputpath,"w") as file:
-   
-    file.write("Financial Analysis\n")
-    file.write("-----------------------------------\n")
-    file.write(f"Total No of Months: {len(monthList)} \n")
-    file.write(f"Net Total of Profit/Loss: ${sum(profitList)}\n")
-    file.write(f"Average Change: {AverageChange}\n")
-    file.write(f"Greatest Increase (in Profits): {maxvalueIncreaseMonth} ${(str(maxvalueIncrease))}\n")
-    file.write(f"Greatest Decrease (in Profits): {maxvalueDecreaseMonth} ${(str(maxvalueDecrease))}")
+        #Calculate the greatest increasee
+        if net_change > greatest_increse[1]:
+            greatest_increase[0] = row[0]
+            greatest_decrease[1] = net_change
+
+# Calculate the Average Net Change
+net_monthly_avg = sum(net_change_list) / len(net_change_list)
+
+# Generate Output Summary
+output = (
+    f"\nFinancial Analysis\n"
+    f"----------------------------\n"
+    f"Total Months: {total_months}\n"
+    f"Total: ${total_net}\n"
+    f"Average  Change: ${net_monthly_avg:.2f}\n"
+    f"Greatest Increase in Profits: {greatest_increase[0]} (${greatest_increase[1]})\n"
+    f"Greatest Decrease in Profits: {greatest_decrease[0]} (${greatest_decrease[1]})\n"
+    )
+
+# Print the output to terminal
+print(output)
+
+# Export the result to text file
+with open(file_to_output, "w") as txt_file:
+    txt_file.write(output)
+
+
